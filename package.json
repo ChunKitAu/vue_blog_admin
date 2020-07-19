@@ -16,6 +16,7 @@
     "vditor": "^3.3.6",
     "view-design": "^4.3.1",
     "vue": "^2.6.11",
+    "vue-canvas-nest": "^2.0.0",
     "vue-echarts": "^5.0.0-beta.0",
     "vue-router": "^3.2.0",
     "vue-waterfall2": "^1.9.6",
