@@ -9,8 +9,8 @@ let success =200;
 
 class HttpRequest {
     constructor() {
-        // this.baseURL = 'http://120.25.237.83:8086/blog';
-        this.baseURL = 'http://localhost:8086/blog';
+        this.baseURL = 'http://120.25.237.83:8086/blog';
+        // this.baseURL = 'http://localhost:8086/blog';
         this.instance = axios.create();
         this.interceptor();
     }

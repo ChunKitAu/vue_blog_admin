@@ -1,6 +1,5 @@
 import HttpRequest from "./http";
 import { urls } from "./urls";
-import da from "element-ui/src/locale/lang/da";
 const http = HttpRequest.getInstance();
 
 export const login = (data) => {
