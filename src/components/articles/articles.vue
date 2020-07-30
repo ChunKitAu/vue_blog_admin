@@ -15,7 +15,7 @@
         <br>
         <Input suffix="ios-search" placeholder="请输入标题" style="width: auto;margin-top: 10px" v-model="searchValue" @keyup.enter.native="search()"/>
         <Button type="primary" class="m-margin" style="margin-left: 20px" @click="reset">重置</Button>
-        <Table class="m-margin" border stripe :columns="columns12" :data="tablData">
+        <Table class="m-margin" border stripe :columns="my_columns" :data="tablData" :loading="loading">
             <template slot-scope="{ row, index }" slot="action">
                 <Button type="primary" size="small" style="margin-right: 5px" @click="toPostPage(row.id)">View</Button>
                 <Button type="error" size="small" @click="remove(index)">Delete</Button>
@@ -29,7 +29,7 @@
     export default {
         data () {
             return {
-                columns12: [
+                my_columns: [
                     {title: '文章标题', key: 'title'},
                     {title: '发表时间', key: 'createTime'},
                     {title: '浏览数', key: 'views'},
@@ -48,6 +48,7 @@
                 totalPage:0,
                 searchValue:"",
                 searchFlag:false,
+                loading:true,
             }
         },
         methods: {
@@ -64,6 +65,7 @@
             getTableData(){
                 var _this = this;
                 _this.tablData = [];
+                _this.loading = true;
                 getAticles({
                     "page": _this.page,
                     "size":_this.size,
@@ -73,6 +75,7 @@
                         _this.tablData = res.data.data;
                     }
                 })
+                _this.loading = false;
             },
 
             //分页改变页码
@@ -88,6 +91,7 @@
             //搜索
             search(){
                 var _this = this;
+                _this.loading = true;
                 _this.searchFlag = true;
                 _this.tablData = [];
                 getSearchList({
@@ -100,6 +104,7 @@
                     if(res.data.data.totalElements)
                         _this.totalPage = res.data.data.totalElements;
                 });
+                _this.loading = false;
             },
 
             reset(){
