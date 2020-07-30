@@ -66,6 +66,7 @@
                 var _this = this;
                 _this.tablData = [];
                 _this.loading = true;
+                _this.totalPage = 1;
                 getAticles({
                     "page": _this.page,
                     "size":_this.size,
@@ -74,8 +75,8 @@
                         _this.totalPage = res.data.data[0].totalPage * 10;
                         _this.tablData = res.data.data;
                     }
+                    _this.loading = false;
                 })
-                _this.loading = false;
             },
 
             //分页改变页码
@@ -93,6 +94,7 @@
                 var _this = this;
                 _this.loading = true;
                 _this.searchFlag = true;
+                _this.totalPage = 1;
                 _this.tablData = [];
                 getSearchList({
                     current:_this.page,
@@ -103,8 +105,9 @@
                         _this.tablData = res.data.data.content;
                     if(res.data.data.totalElements)
                         _this.totalPage = res.data.data.totalElements;
+                        _this.loading = false;
                 });
-                _this.loading = false;
+
             },
 
             reset(){
