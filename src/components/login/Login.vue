@@ -70,7 +70,6 @@ export default {
         name: "/"
       }).catch(()=>{});
       login(data).then(res => {
-
         console.log(res.data)
         if (res.data.code !== 200) {
           this.$Message.error("账号或密码错误");

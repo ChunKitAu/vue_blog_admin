@@ -6,11 +6,12 @@ import Vue from "../main";
 //认证失败
 let token_confrim_fail = 520;
 let success =200;
+let blogUrl = 'http://120.25.237.83:8086/blog';
+// let blogUrl = 'http://localhost:8086/blog';
+let searchUrl = 'http://localhost:8087';
 
 class HttpRequest {
     constructor() {
-        this.baseURL = 'http://120.25.237.83:8086/blog';
-        // this.baseURL = 'http://localhost:8086/blog';
         this.instance = axios.create();
         this.interceptor();
     }
@@ -27,7 +28,10 @@ class HttpRequest {
     interceptor() {
         // 请求拦截器
         this.instance.interceptors.request.use(config => {
-            // do something
+            if(config.url === HttpRequest.SEARCH )
+                config.baseURL = searchUrl;
+            else config.baseURL = blogUrl;
+
             if (config.url !== HttpRequest.LOGIN && config.url !== HttpRequest.REGISTER) {
                 const token = Vue.$store.getters.token;
                 if (token) {
@@ -48,17 +52,13 @@ class HttpRequest {
         // 响应拦截器
         this.instance.interceptors.response.use(response => {
 
-            if(response.data.code === success){
-                return response;
-            }
-            //
             if(response.data.code === token_confrim_fail){
                 alert("请登录");
                 Vue.$router.push({
                     name: "login"
                 })
             }
-
+            return response;
         }, error => {
             // do something
             return Promise.reject(error);
@@ -136,5 +136,6 @@ class HttpRequest {
 
 HttpRequest.LOGIN = "/user/login";
 HttpRequest.REGISTER = "/user/save";
+HttpRequest.SEARCH = "/search";
 
 export default HttpRequest;

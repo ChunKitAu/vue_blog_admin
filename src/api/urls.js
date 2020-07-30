@@ -41,5 +41,8 @@ export const urls = {
     //仪表盘获取文章访问详情
     get_dashboard_article:"dashboard/blog_ranking/list",
 
+    //搜索
+    getSearchList : "/search",
+
 
 }

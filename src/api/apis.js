@@ -65,3 +65,7 @@ export const getDashboardArticles = (data) => {
     return http.get(urls.get_dashboard_article, data);
 }
 
+//搜索
+export const getSearchList = (data) => {
+    return http.get(urls.getSearchList, data);
+}

@@ -43,7 +43,8 @@ Vue.use(VueRouter)
           name: 'articles',
           component:()=> import('../components/articles'),
           meta: {
-            breadcrumb: ["主页", "文章","文章管理"]
+            breadcrumb: ["主页", "文章","文章管理"],
+            keepAlive: true,
           }
         },
         {

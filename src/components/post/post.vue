@@ -220,9 +220,6 @@
                 delete this.imgFile[pos]
             },
         },
-        created() {
-
-        },
         mounted() {
             var _this = this;
             _this.blogId = _this.$route.params.blogId;
@@ -232,7 +229,12 @@
 
             _this.getTypes();
             _this.getTags();
-
+        },
+        beforeRouteLeave(to, from, next){
+            if(to.name === 'articles') {
+                to.meta.keepAlive = true
+            }
+            next()
         }
 
 

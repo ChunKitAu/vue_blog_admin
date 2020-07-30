@@ -23,7 +23,12 @@
                 <Breadcrumb :style="{ margin: '16px 0' }">
                     <BreadcrumbItem v-for="item in breadcrumb" :key="item">{{item}}</BreadcrumbItem>
                 </Breadcrumb>
-                <router-view />
+                <!--需要缓存的试图组件-->
+                <keep-alive>
+                    <router-view v-if="$route.meta.keepAlive"/>
+                </keep-alive>
+                <!--不需要缓存的试图组件-->
+                <router-view v-if="!$route.meta.keepAlive"></router-view>
             </div>
         </Layout>
 
