@@ -29,11 +29,13 @@
                           ref=md @imgAdd="$imgAdd" @imgDel="$imgDel"/>
         </FormItem>
         <FormItem>
-            <Button type="primary" @click="handleSubmit('blogData')" v-if="blogId">
-                修改
+            <Button type="primary" @click="handleSubmit('blogData')" v-if="blogId"  :loading="loading">
+                <span v-if="!loading">修改</span>
+                <span v-else>修改中</span>
             </Button>
-            <Button type="primary" @click="handleSubmit('blogData')" v-if="!blogId">
-                发布
+            <Button type="primary" @click="handleSubmit('blogData')" v-if="!blogId" :loading="loading">
+                <span v-if="!loading">发布</span>
+                <span v-else>发布中</span>
             </Button>
             <Button @click="handleReset('blogData')" style="margin-left: 8px">Reset</Button>
         </FormItem>
@@ -62,6 +64,7 @@
                 typesMenu:[],
                 //标签菜单
                 tagsMenu: [],
+                loading:false,
                 //表单认证
                 ruleValidate: {
                     title: [
@@ -119,8 +122,9 @@
             }
         },
         methods: {
-            handleSubmit(name) {
+            async handleSubmit(name) {
                 var _this = this;
+                _this.loading = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         //存在id为 修改文章
@@ -128,13 +132,13 @@
                             _this.blogData.id = _this.blogId;
                             console.log(_this.blogData);
                             putBlog(_this.blogData).then(res=>{
-                                console.log(res)
                                 if(res.data.code === 200){
                                     this.$Message.success('修改成功');
                                     this.$router.push({ name: "articles"});
                                 }else {
                                     this.$Message.warning('修改时发生错误');
                                 }
+                                _this.loading = false;
                             })
                         }else {
                             //不存在id 为发表文章
@@ -144,6 +148,7 @@
                                     this.$Message.success('Success!');
                                     this.$router.push({ name: "articles"});
                                 }else  this.$Message.error('Fail!');
+                                _this.loading = false;
                             })
                         }
                     } else {
