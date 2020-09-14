@@ -21,7 +21,7 @@
                 <Button type="error" size="small" @click="remove(index)">Delete</Button>
             </template>
         </Table>
-        <Page class="page m-margin" :total="totalPage" :page-size="size" @on-change="changePage"/>
+        <Page class="page m-margin" :current="page"  :total="totalPage" :page-size="size" @on-change="changePage"/>
     </div>
 </template>
 <script>

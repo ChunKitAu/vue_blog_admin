@@ -7,8 +7,9 @@ import Vue from "../main";
 let token_confrim_fail = 520;
 let success =200;
 let blogUrl = 'http://120.25.237.83:8086/blog';
+let searchUrl = 'http://120.25.237.83:8087';
 // let blogUrl = 'http://localhost:8086/blog';
-let searchUrl = 'http://localhost:8087';
+// let searchUrl = 'http://localhost:8087';
 
 class HttpRequest {
     constructor() {
@@ -28,6 +29,7 @@ class HttpRequest {
     interceptor() {
         // 请求拦截器
         this.instance.interceptors.request.use(config => {
+            console.log(config.url);
             if(config.url === HttpRequest.SEARCH )
                 config.baseURL = searchUrl;
             else config.baseURL = blogUrl;
