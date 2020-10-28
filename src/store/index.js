@@ -1,26 +1,13 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import state from "./state";
-Vue.use(Vuex)
+import Vue from 'vue';
+import Vuex from 'vuex';
+import token from './modules/token';
+Vue.use(Vuex);
 
-export default new Vuex.Store({
-  state,
-  mutations: {
-    setToken(state, token) {
-      state.token = token;
-      localStorage.setItem("token", token);
-    },
-    clearToken(state) {
-      state.token = "";
-      localStorage.setItem("token", "")
-    },
-  },
-  getters:{
-    token: state => state.token,
-  },
-
-  actions: {
-  },
+const store = new Vuex.Store({
   modules: {
+    token
   }
-})
+});
+
+
+export default store;

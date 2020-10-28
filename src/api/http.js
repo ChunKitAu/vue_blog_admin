@@ -54,9 +54,7 @@ class HttpRequest {
 
             if(response.data.code === token_confrim_fail){
                 alert("请登录");
-                Vue.$router.push({
-                    name: "login"
-                })
+                Vue.$router.push({name: "login"}).catch(()=>{});
             }
             return response;
         }, error => {

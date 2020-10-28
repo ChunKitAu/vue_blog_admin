@@ -80,6 +80,7 @@
 </template>
 
 <script>
+    import types from "@/store/types";
     export default {
         name: "comm_header",
         data(){
@@ -89,13 +90,7 @@
                     标签管理: "tags",
                     分类管理: "types",
                     仪表盘:'dashboard',
-
-                    我的主页: "user",
-                    发布任务: "post",
-                    商城管理: "shopmanager",
-                    已接收任务: "myTasks",
-                    已兑清单: "exchanged",
-                    已发布任务: "postTasks"
+                    // 我的主页: "user",
                 },
             }
         },
@@ -107,8 +102,10 @@
             toPage(name) {
                 if (name === "退出登录") {
                     if (confirm("确认退出登录吗")) {
-                        this.$store.commit("clearToken");
-                        this.$router.push({ name: "login" }).catch(()=>{});
+                        let _this = this;
+                        _this.$store.commit(types.CLEARTOKEN);
+                        localStorage.removeItem("LoginForm");
+                        _this.$router.push({ name: "login" }).catch(()=>{});
                     }
                 }
                 this.$router.push({

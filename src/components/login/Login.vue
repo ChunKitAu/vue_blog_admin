@@ -32,16 +32,19 @@
         >登录</Button>
       </FormItem>
     </Form>
-    <div class="registerTips">
-      <div>还没有账号?</div>
-      <a @click="toRegister" style="margin-left: 5px; color: #007bff">点击注册</a>
-    </div>
+<!--    <div class="registerTips">-->
+<!--      <div>还没有账号?</div>-->
+<!--      <a @click="toRegister" style="margin-left: 5px; color: #007bff">点击注册</a>-->
+<!--    </div>-->
   </div>
 </template>
 
 <script>
 import { login } from "../../api/apis";
+import types from "@/store/types";
+
 export default {
+
   created() {
     let LoginForm = localStorage.getItem("LoginForm");
     if (LoginForm) {
@@ -49,6 +52,7 @@ export default {
       this.remeberme = true;
     }
   },
+
   data() {
     return {
       LoginForm: {
@@ -59,6 +63,13 @@ export default {
       remeberme: false
     };
   },
+
+  mounted() {
+    if (this.remeberme){
+      this.login(this.LoginForm);
+    }
+  },
+
   methods: {
     login(data) {
       if (!data["username"] || !data["password"]) {
@@ -66,26 +77,27 @@ export default {
         return;
       }
       this.loginLoading = true;
-      this.$router.push({
-        name: "/"
-      }).catch(()=>{});
+
       login(data).then(res => {
-        console.log(res.data)
+        let _this = this;
         if (res.data.code !== 200) {
-          this.$Message.error("账号或密码错误");
-          this.loginLoading = false;
+          _this.$Message.error("账号或密码错误");
+          _this.loginLoading = false;
           return;
         }
-        this.remeberme &&
-          localStorage.setItem("LoginForm", JSON.stringify(this.LoginForm));
-        this.loginLoading = false;
+        //remember me
+        _this.remeberme && localStorage.setItem("LoginForm", JSON.stringify(_this.LoginForm));
+
+        _this.loginLoading = false;
+
         // token和id存起来
-        this.$store.commit("setToken", res.data.data.token);
+        _this.$store.commit(types.TOKEN, res.data.data.token);
 
-        this.$router.push({ name: "Home" }).catch(()=>{});
-
+        //重定向
+        _this.$router.push({ name: "Home" }).catch(()=>{});
       });
     },
+
     toRegister: function() {
       this.$router.push({ name: "register" }).catch(()=>{});
     }
