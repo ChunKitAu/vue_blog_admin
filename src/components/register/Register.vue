@@ -68,7 +68,6 @@ export default {
       }
       this.registerLoading = true;
       register(RegisterForm).then(res => {
-        console.log(res);
         this.$Message.success("注册成功");
         this.registerLoading = false;
         setTimeout(() => {

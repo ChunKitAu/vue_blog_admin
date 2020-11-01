@@ -14,7 +14,12 @@ export const urls = {
     delBlog:'/article/',
     //根据id获取文章
     getArticleById:"/article/",
-
+    // 分页获取当前用户文章
+    getArticlesByUser: "/article/user/list",
+    //分页根据标签id获取当前用户的文章信息
+    getArticlesByUserAndTagId : '/article/user/tag/list/',
+    //分页根据分类id获取当前用户的文章信息
+    getArticlesByUserAndTypeId : '/article/user/type/list/',
 
 
     // 获取标签

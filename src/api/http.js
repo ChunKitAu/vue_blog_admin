@@ -29,7 +29,6 @@ class HttpRequest {
     interceptor() {
         // 请求拦截器
         this.instance.interceptors.request.use(config => {
-            console.log(config.url);
             if(config.url === HttpRequest.SEARCH )
                 config.baseURL = searchUrl;
             else config.baseURL = blogUrl;

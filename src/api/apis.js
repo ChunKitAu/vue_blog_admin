@@ -26,6 +26,15 @@ export const putBlog = (data) => {
 export const delBlog = (id) => {
     return http.del(urls.delBlog + id);
 }
+export const getArticlesByUser = (data) => {
+    return http.get(urls.getArticlesByUser, data);
+}
+export const getArticleByUserAndTagId = (id) => {
+    return http.get(urls.getArticlesByUserAndTagId + id);
+}
+export const getArticleByUserAndTypeId = (id) => {
+    return http.get(urls.getArticlesByUserAndTypeId + id);
+}
 
 //标签
 export const getTags = (data) => {

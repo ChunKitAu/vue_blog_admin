@@ -15,17 +15,17 @@
         <br>
         <Input suffix="ios-search" placeholder="请输入标题" style="width: auto;margin-top: 10px" v-model="searchValue" @keyup.enter.native="search()"/>
         <Button type="primary" class="m-margin" style="margin-left: 20px" @click="reset">重置</Button>
-        <Table class="m-margin" border stripe :columns="my_columns" :data="tablData" :loading="loading">
+        <Table class="m-margin" border stripe :columns="my_columns" :data="tableData" :loading="loading">
             <template slot-scope="{ row, index }" slot="action">
                 <Button type="primary" size="small" style="margin-right: 5px" @click="toPostPage(row.id)">View</Button>
-                <Button type="error" size="small" @click="remove(index)">Delete</Button>
+                <Button type="error" size="small" @click="deleteArticle(index,row.id)">Delete</Button>
             </template>
         </Table>
         <Page class="page m-margin" :current="page"  :total="totalPage" :page-size="size" @on-change="changePage"/>
     </div>
 </template>
 <script>
-    import {getAticles,getSearchList} from "@/api/apis"
+    import {getArticlesByUser,delBlog,getSearchList} from "@/api/apis"
     export default {
         data () {
             return {
@@ -42,7 +42,7 @@
                         align: 'center'
                     }
                 ],
-                tablData: [],
+                tableData: [],
                 page:1,
                 size:10,
                 totalPage:0,
@@ -56,24 +56,22 @@
             toPostPage(id){
                 this.$router.push({ name: "post",params:{blogId:id} });
             },
-            //删除
-            remove (index) {
-                this.tablData.splice(index, 1);
-            },
 
             //获取文章列表
             getTableData(){
                 var _this = this;
-                _this.tablData = [];
+                _this.tableData = [];
                 _this.loading = true;
                 _this.totalPage = 1;
-                getAticles({
+                getArticlesByUser({
                     "page": _this.page,
                     "size":_this.size,
                 }).then(res=>{
-                    if(!res.data.data === undefined || res.data.data.length > 0){
-                        _this.totalPage = res.data.data[0].totalPage * 10;
-                        _this.tablData = res.data.data;
+                    if (res.data.code == 200){
+                        if(!res.data.data === undefined || res.data.data.length > 0){
+                            _this.totalPage = res.data.data[0].totalPage * 10;
+                            _this.tableData = res.data.data;
+                        }
                     }
                     _this.loading = false;
                 })
@@ -95,25 +93,38 @@
                 _this.loading = true;
                 _this.searchFlag = true;
                 _this.totalPage = 1;
-                _this.tablData = [];
+                _this.tableData = [];
                 getSearchList({
                     current:_this.page,
                     size:_this.size,
                     keyWord:_this.searchValue
                 }).then(res=>{
                     if(!res.data.data.content === undefined || res.data.data.content.length > 0)
-                        _this.tablData = res.data.data.content;
+                        _this.tableData = res.data.data.content;
                     if(res.data.data.totalElements)
                         _this.totalPage = res.data.data.totalElements;
                         _this.loading = false;
                 });
+            },
+            //删除
+            deleteArticle(index,article_id){
+                //删除前端数据缓存
+                if (confirm("确定删除？")){
+                    delBlog(article_id).then(res =>{
+                        console.log(res.data);
+                        if (res.data.code == 200){
+                            this.tableData.splice(index, 1);
+                            this.$Message.success("删除成功!");
+                        }else this.$Message.success("删除失败!");
+                    })
+                }
 
             },
 
             reset(){
                 var _this = this;
                 _this.searchFlag = false;
-                _this.tablData = [];
+                _this.tableData = [];
                 _this.page  = 1;
                 _this.getTableData();
             }
