@@ -5,16 +5,18 @@
 </style>
 <template>
     <Form ref="blogData" :model="blogData" :rules="ruleValidate" :label-width="80" label-position="left" >
-        <FormItem label="文章标题" prop="title" >
+        <FormItem label="文章标题" prop="validateTitle" >
             <Input v-model="blogData.title" placeholder="请输入文章标题" style="width: 500px"></Input>
         </FormItem>
-        <FormItem label="分类" prop="types" >
-            <Select v-model="blogData.typeId"  style="width:200px" clearable filterable allow-create @on-create="addType">
+        <FormItem label="分类" prop="validateType" >
+            <Select v-model="blogData.typeId"  style="width:260px"
+                    clearable  filterable allow-create @on-create="addType">
                 <Option v-for="item in typesMenu" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
         </FormItem>
-        <FormItem label="标签" prop="tags">
-            <Select v-model="blogData.tags"  style="width:260px" multiple filterable allow-create @on-create="addTag">
+        <FormItem label="标签" prop="validateTag">
+            <Select v-model="blogData.tags"  style="width:260px"
+                    multiple filterable allow-create @on-create="addTag">
                 <Option v-for="item in tagsMenu" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
         </FormItem>
@@ -24,7 +26,7 @@
             评论 <i-switch v-model="blogData.commentabled"></i-switch>
         </FormItem>
 
-        <FormItem label="内容" prop="content">
+        <FormItem label="内容" prop="validateContent">
             <mavon-editor class="markdown" v-model="blogData.content" :toolbars="toolbars"
                           ref=md @imgAdd="$imgAdd" @imgDel="$imgDel"/>
         </FormItem>
@@ -47,6 +49,23 @@
 
     export default {
         data() {
+            const validateNumber = (rule, value, callback) => {
+                console.log(value)
+                let reg =/^\+?[1-9][0-9]*$/;
+                if(reg.test(value)){
+                    callback();
+                }else {
+                    return callback(new Error("请选择文章类型"));
+                }
+
+
+                if (value === '') {
+                    callback(new Error('Please enter your password'));
+                } else {
+                    callback();
+                }
+            };
+
             return {
                 blogData: {
                     id:'',
@@ -67,18 +86,18 @@
                 loading:false,
                 //表单认证
                 ruleValidate: {
-                    title: [
+                    validateTitle: [
                         {required: true, message: '请输入文章标题', trigger: 'change'}
                     ],
                     //todo : 单选框验证一直报错
-                    types: [
-                        // {required: true, message: '请选择文章类型', trigger: 'change',type:'number'},
-                        // {type: 'number',  message: '请选择文章类型', trigger: 'change'}
+                    validateType: [
+                        // { validator: validateNumber, trigger: 'change',required: true },
+                        // { required: true, message: '请选择文章类型', trigger: 'change',type:'number'},
                     ],
-                    tags: [
+                    validateTag: [
                         {required: true, message: '请选择文章标签', trigger: 'change',type:'array'}
                     ],
-                    content: [
+                    validateContent: [
                         {required: true, message: '请输入内容', trigger: 'change'},
                         {type: 'string', min: 20, message: '文章内容不得少于20个字', trigger: 'blur'}
                     ]
@@ -166,8 +185,8 @@
                     page: 1,
                     size:100,
                 }).then(res=>{
-                    for( var item of res.data.data){
-                        var tag =[];
+                    for( let item of res.data.data){
+                        let tag =[];
                         tag.value = item.id;
                         tag.label = item.name;
                         this.tagsMenu.push(tag);
@@ -178,35 +197,32 @@
             //添加标签
             addTag(val){
                 let _this = this;
-                // addTag({"name": _this.input_value}).then(res => {
-                //     if (res.data.code === 200) {
-                //         this.$Message.info('添加成功！');
-                //         _this.getData();
-                //     } else {
-                //         this.$Message.warning('错误！');
-                //     }
-                // })
-                _this.tagsMenu.push({
-                    value:val,
-                    label:val
+                addTag({"name": val}).then(res => {
+                    if (res.data.code === 200) {
+                        _this.tagsMenu.push({
+                            value:res.data.data.id,
+                            label:val
+                        })
+                    } else {
+                        this.$Message.warning('错误！');
+                    }
                 })
             },
 
             //添加分类
             addType(val){
                 let _this = this;
-                // addType({"name": _this.input_value}).then(res => {
-                //     if (res.data.code === 200) {
-                //
-                //         _this.getData();
-                //     } else {
-                //         this.$Message.warning('错误！');
-                //     }
-                // })
-                _this.typesMenu.push({
-                    value:val,
-                    label:val
+                addType({"name": val}).then(res => {
+                    if (res.data.code === 200) {
+                        _this.typesMenu.push({
+                            value:res.data.data.id+'',
+                            label:val
+                        })
+                    } else {
+                        this.$Message.warning('错误！');
+                    }
                 })
+
             },
 
             //获取类型列表
@@ -215,8 +231,8 @@
                     page: 1,
                     size:100,
                 }).then(res =>{
-                    for( var item of res.data.data){
-                        var type =[];
+                    for( let item of res.data.data){
+                        let type =[];
                         type.value = item.id;
                         type.label = item.name;
                         this.typesMenu.push(type);

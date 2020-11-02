@@ -44,7 +44,6 @@
 
 <script>
 import { register } from "@/api/apis";
-import "@/utils/slideBlock/slideBlock.js"
 export default {
   data() {
     return {

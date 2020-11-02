@@ -32,10 +32,10 @@
         >登录</Button>
       </FormItem>
     </Form>
-    <div class="registerTips">
-      <div>还没有账号?</div>
-      <a @click="toRegister" style="margin-left: 5px; color: #007bff">点击注册</a>
-    </div>
+<!--    <div class="registerTips">-->
+<!--      <div>还没有账号?</div>-->
+<!--      <a @click="toRegister" style="margin-left: 5px; color: #007bff">点击注册</a>-->
+<!--    </div>-->
   </div>
 </template>
 
@@ -46,9 +46,8 @@ import types from "@/store/types";
 export default {
 
   created() {
-    let LoginForm = localStorage.getItem("LoginForm");
-    if (LoginForm) {
-      this.LoginForm = JSON.parse(LoginForm);
+    let LoginForm = localStorage.getItem('Authorization');
+    if (LoginForm!=null || LoginForm != undefined) {
       this.remeberme = true;
     }
   },
@@ -85,8 +84,8 @@ export default {
           _this.loginLoading = false;
           return;
         }
-        //remember me
-        _this.remeberme && localStorage.setItem("LoginForm", JSON.stringify(_this.LoginForm));
+        //todo remember me
+        // _this.remeberme && localStorage.setItem("LoginForm", JSON.stringify(_this.LoginForm));
 
         _this.loginLoading = false;
 

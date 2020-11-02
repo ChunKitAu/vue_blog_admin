@@ -68,12 +68,11 @@
                 //ecahrt loading
                 let myChart = _this.$echarts.init(document.getElementById("echart"));
                 myChart.showLoading();
-
                 getDashboardViews({
                     "type":_this.date
                 }).then(res=>{
-                    _this.xAxis_data=[];
                     _this.series_data=[];
+                    _this.xAxis_data=[];
                     switch (_this.date) {
                         case 'day':
                             res.data.data.forEach((item,index)=>{
@@ -184,7 +183,9 @@
         },
 
         updated() {
-            this.drawChart();
+            setTimeout(() => {
+                this.drawChart();
+            }, 300)
         }
     };
 </script>

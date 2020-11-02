@@ -14,42 +14,40 @@
 </style>
 <template>
     <div class="articles">
-        <Card style="padding-bottom: 50px">
-            <div class="my-margin-top">
-                <router-link :to="{name:'post'}"><Button type="primary" >发表文章</Button></router-link>
-            </div>
-            <div class="my-margin-top">
-                <span>标题：</span>
-                <Input suffix="ios-search" placeholder="请输入标题" style="width: auto;" v-model="searchValue"
-                       @keyup.enter.native="search()"/>
-                <Button type="primary" class="my-margin-left"
-                        @click="reset">重置</Button>
-            </div>
-            <div class="my-margin-top">
-                <!--  分类  -->
-                <span>分类：</span>
-                <Select v-model="select_type_list" style="width:auto ;"
-                        clearable filterable @on-change="getArticleByUserAndTypeId">
-                    <Option v-for="item in type_list" :value="item.id" :key="item.id">{{ item.name }}</Option>
-                </Select>
-                <!--   标签-->
-                <span class="my-margin-left">标签：</span>
-                <Select v-model="select_tag_list"  style="width:auto"
-                        multiple filterable @on-change="getArticleByUserAndTagId">
-                    <Option v-for="item in tag_list" :value="item.id" :key="item.id">{{ item.name }}</Option>
-                </Select>
-            </div>
-            <div class="my-margin-top">
-                <Table   :columns="my_columns" :data="tableData" :loading="loading"
-                         border stripe>
-                    <template slot-scope="{ row, index }" slot="action">
-                        <Button type="primary" size="small" style="margin-right: 5px" @click="toPostPage(row.id)">View</Button>
-                        <Button type="error" size="small" @click="deleteArticle(index,row.id)">Delete</Button>
-                    </template>
-                </Table>
-                <Page class="page my-margin-top" :current="page"  :total="totalPage" :page-size="size" @on-change="changePage"/>
-            </div>
-        </Card>
+        <div class="my-margin-top">
+            <router-link :to="{name:'post'}"><Button type="primary" >发表文章</Button></router-link>
+        </div>
+        <div class="my-margin-top">
+            <span>标题：</span>
+            <Input suffix="ios-search" placeholder="请输入标题" style="width: auto;" v-model="searchValue"
+                   @keyup.enter.native="search()"/>
+            <Button type="primary" class="my-margin-left"
+                    @click="reset">重置</Button>
+        </div>
+        <div class="my-margin-top">
+            <!--  分类  -->
+            <span>分类：</span>
+            <Select v-model="select_type_list" style="width:auto ;"
+                    clearable filterable @on-change="getArticleByUserAndTypeId">
+                <Option v-for="item in type_list" :value="item.id" :key="item.id">{{ item.name }}</Option>
+            </Select>
+            <!--   标签-->
+            <span class="my-margin-left">标签：</span>
+            <Select v-model="select_tag_list"  style="width:auto"
+                    multiple filterable @on-change="getArticleByUserAndTagId">
+                <Option v-for="item in tag_list" :value="item.id" :key="item.id">{{ item.name }}</Option>
+            </Select>
+        </div>
+        <div class="my-margin-top">
+            <Table   :columns="my_columns" :data="tableData" :loading="loading" style="overflow-x: hidden"
+                     border stripe>
+                <template slot-scope="{ row, index }" slot="action">
+                    <Button type="primary" size="small" style="margin-right: 5px" @click="toPostPage(row.id)">View</Button>
+                    <Button type="error" size="small" @click="deleteArticle(index,row.id)">Delete</Button>
+                </template>
+            </Table>
+            <Page class="page my-margin-top" :current="page"  :total="totalPage" :page-size="size" @on-change="changePage"/>
+        </div>
     </div>
 </template>
 <script>

@@ -34,14 +34,15 @@ class HttpRequest {
             else config.baseURL = blogUrl;
 
             if (config.url !== HttpRequest.LOGIN && config.url !== HttpRequest.REGISTER) {
-                const token = Vue.$store.getters.token;
-                if (token) {
+                let token = Vue.$store.getters.token;
+                // let token = localStorage.getItem('Authorization');
+                if (token != null || token !== undefined) {
                     config.headers['Authorization'] = token;
                 } else {
                     alert("请先进行登录");
                     Vue.$router.push({
                         name: "login"
-                    })
+                    }).catch(()=>{})
                 }
             }
             return config;
