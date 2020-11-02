@@ -130,7 +130,6 @@
                         //存在id为 修改文章
                         if(_this.blogId){
                             _this.blogData.id = _this.blogId;
-                            console.log(_this.blogData);
                             putBlog(_this.blogData).then(res=>{
                                 if(res.data.code === 200){
                                     this.$Message.success('修改成功');
@@ -155,6 +154,7 @@
                         this.$Message.error('Fail!');
                     }
                 })
+                _this.loading = false;
             },
             handleReset(name) {
                 this.$refs[name].resetFields();

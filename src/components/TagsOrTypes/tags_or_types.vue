@@ -75,6 +75,8 @@
                                 this.$Message.info('删除成功');
                                 _this.getData();
                             }
+                        }).catch(res=>{
+                            this.$Message.error('删除失败');
                         })
                     } else if (_this.path === 'types') {
                         delType(id).then(res => {
@@ -82,6 +84,8 @@
                                 this.$Message.info('删除成功');
                                 _this.getData();
                             }
+                        }).catch(res=>{
+                            this.$Message.error('删除失败');
                         })
                     }
                 }
