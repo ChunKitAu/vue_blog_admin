@@ -1,27 +1,33 @@
 <style scoped>
-    #main{
-        width: 50%;height:400px; float: left;margin-top: 50px
+    #echart{
+        width: 100%;height:400px; float: left;margin-top: 50px
     }
 </style>
 
 <template>
     <div id="app">
-        <Tabs :value="tagName" @on-click="handleClick" style="float: right">
-            <TabPane label="今日" name="day"  ></TabPane>
-            <TabPane label="本周" name="week" ></TabPane>
-            <TabPane label="本月" name="month"></TabPane>
-            <TabPane label="今年" name="year" ></TabPane>
-        </Tabs>
-        <div style="display: inline">
-            <div id="main" ></div>
-            <div style="width: 50% ;float: right">
-                <Table stripe :columns="columns" :data="tableData"></Table>
-                <Page style="float: right;margin-top: 10px" :total="totalPage" @on-change="changePage"/>
-            </div>
-        </div>
-
+        <Card>
+            <Row>
+                <Col :sm="12" :lg="{ span: 8, offset: 3 }">
+                    <div style="max-width: 600px">
+                        <div id="echart"></div>
+                    </div>
+                </Col>
+                <Col :sm="12" :lg="{ span: 11, offset: 1 }">
+                    <div style="max-width: 600px">
+                        <Tabs :value="tagName" @on-click="handleClick">
+                            <TabPane label="今日" name="day"  ></TabPane>
+                            <TabPane label="本周" name="week" ></TabPane>
+                            <TabPane label="本月" name="month"></TabPane>
+                            <TabPane label="今年" name="year" ></TabPane>
+                        </Tabs>
+                        <Table stripe :columns="columns" :data="tableData"></Table>
+                        <Page style="float: right;margin-top: 10px" :total="totalPage" @on-change="changePage"/>
+                    </div>
+                </Col>
+            </Row>
+        </Card>
     </div>
-
 </template>
 
 <script>
@@ -49,23 +55,18 @@
         },
         methods:{
             handleClick(name){
-                var _this = this;
+                let _this = this;
                 _this.date = name;
                 _this.tagName = name;
                 _this.totalPage = 0;
                 _this.tableData = 0;
                 _this.getEchartsData();
                 _this.getTableData();
-                setTimeout(() => {
-                    _this.drawChart();
-                }, 300)
-
-
             },
             getEchartsData(){
-                var _this = this;
+                let _this = this;
                 //ecahrt loading
-                let myChart = _this.$echarts.init(document.getElementById("main"));
+                let myChart = _this.$echarts.init(document.getElementById("echart"));
                 myChart.showLoading();
 
                 getDashboardViews({
@@ -115,7 +116,7 @@
             drawChart() {
                 var _this = this;
                 // 基于准备好的dom，初始化echarts实例
-                let myChart = _this.$echarts.init(document.getElementById("main"));
+                let myChart = _this.$echarts.init(document.getElementById("echart"));
                 // 指定图表的配置项和数据
                 let  option = {
                     xAxis: {
@@ -152,7 +153,7 @@
             },
 
             getTableData(){
-                var _this = this;
+                let _this = this;
                 getDashboardArticles({
                     page:_this.page,
                     size:10,
@@ -167,7 +168,7 @@
             },
 
             changePage(index){
-                var _this = this;
+                let _this = this;
                 _this.page = index;
                 _this.getTableData();
 
@@ -176,11 +177,14 @@
         },
         mounted() {
             this.getEchartsData();
+            this.getTableData();
             setTimeout(() => {
-                this.getTableData();
                 this.drawChart();
-            }, 500)
+            }, 300)
+        },
 
+        updated() {
+            this.drawChart();
         }
     };
 </script>

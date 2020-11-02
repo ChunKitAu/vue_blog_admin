@@ -8,13 +8,13 @@
         <FormItem label="文章标题" prop="title" >
             <Input v-model="blogData.title" placeholder="请输入文章标题" style="width: 500px"></Input>
         </FormItem>
-        <FormItem label="分类" prop="types">
-            <Select v-model="blogData.typeId" clearable style="width:200px" >
+        <FormItem label="分类" prop="types" >
+            <Select v-model="blogData.typeId"  style="width:200px" clearable filterable allow-create @on-create="addType">
                 <Option v-for="item in typesMenu" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
         </FormItem>
         <FormItem label="标签" prop="tags">
-            <Select v-model="blogData.tags" multiple style="width:260px" >
+            <Select v-model="blogData.tags"  style="width:260px" multiple filterable allow-create @on-create="addTag">
                 <Option v-for="item in tagsMenu" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
         </FormItem>
@@ -42,7 +42,7 @@
     </Form>
 </template>
 <script>
-    import {getTags,getTypes,getArticleById,postImg,postBlog,putBlog} from "../../api/apis";
+    import {getTags,getTypes,getArticleById,postImg,postBlog,putBlog,addTag,addType} from "../../api/apis";
     //markdown 编辑器
 
     export default {
@@ -172,6 +172,40 @@
                         tag.label = item.name;
                         this.tagsMenu.push(tag);
                     }
+                })
+            },
+
+            //添加标签
+            addTag(val){
+                let _this = this;
+                // addTag({"name": _this.input_value}).then(res => {
+                //     if (res.data.code === 200) {
+                //         this.$Message.info('添加成功！');
+                //         _this.getData();
+                //     } else {
+                //         this.$Message.warning('错误！');
+                //     }
+                // })
+                _this.tagsMenu.push({
+                    value:val,
+                    label:val
+                })
+            },
+
+            //添加分类
+            addType(val){
+                let _this = this;
+                // addType({"name": _this.input_value}).then(res => {
+                //     if (res.data.code === 200) {
+                //
+                //         _this.getData();
+                //     } else {
+                //         this.$Message.warning('错误！');
+                //     }
+                // })
+                _this.typesMenu.push({
+                    value:val,
+                    label:val
                 })
             },
 

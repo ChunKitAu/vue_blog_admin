@@ -32,10 +32,10 @@
         >登录</Button>
       </FormItem>
     </Form>
-<!--    <div class="registerTips">-->
-<!--      <div>还没有账号?</div>-->
-<!--      <a @click="toRegister" style="margin-left: 5px; color: #007bff">点击注册</a>-->
-<!--    </div>-->
+    <div class="registerTips">
+      <div>还没有账号?</div>
+      <a @click="toRegister" style="margin-left: 5px; color: #007bff">点击注册</a>
+    </div>
   </div>
 </template>
 

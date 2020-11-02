@@ -20,6 +20,12 @@
         <input v-model="confirmPwd" type="password" class="input" maxlength="18" />
       </FormItem>
       <FormItem>
+        <!-- 验证码 -->
+        <div ref="captcha" id="captcha"></div>
+        <!-- 验证结果 -->
+        <div id="msg"></div>
+      </FormItem>
+      <FormItem>
         <Button
           style="margin-top: 25px; background: #5A8CFF; border:#5A8CFF"
           type="primary"
@@ -38,6 +44,7 @@
 
 <script>
 import { register } from "@/api/apis";
+import "@/utils/slideBlock/slideBlock.js"
 export default {
   data() {
     return {
@@ -86,7 +93,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style scoped lang="less">
 .input {
   display: block;
   width: 100%;
