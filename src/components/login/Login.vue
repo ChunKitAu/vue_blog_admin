@@ -90,7 +90,8 @@ export default {
         _this.loginLoading = false;
 
         // token和id存起来
-        _this.$store.commit(types.TOKEN, res.data.data.token);
+        _this.$store.dispatch('setToken',res.data.data.token);
+        // _this.$store.commit(types.TOKEN, res.data.data.token);
 
         //重定向
         _this.$router.push({ name: "Home" }).catch(()=>{});

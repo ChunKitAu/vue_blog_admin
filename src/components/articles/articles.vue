@@ -27,13 +27,13 @@
         <div class="my-margin-top">
             <!--  分类  -->
             <span>分类：</span>
-            <Select v-model="select_type_list" style="width:auto ;"
+            <Select v-model="select_type_list" style="width:auto ;" ref="resetTypeSelect"
                     clearable filterable @on-change="getArticleByUserAndTypeId">
                 <Option v-for="item in type_list" :value="item.id" :key="item.id">{{ item.name }}</Option>
             </Select>
             <!--   标签-->
             <span class="my-margin-left">标签：</span>
-            <Select v-model="select_tag_list"  style="width:auto"
+            <Select v-model="select_tag_list"  style="width:auto" ref="resetTagSelect"
                     multiple filterable @on-change="getArticleByUserAndTagId">
                 <Option v-for="item in tag_list" :value="item.id" :key="item.id">{{ item.name }}</Option>
             </Select>
@@ -92,7 +92,7 @@
 
             //获取文章列表
             getTableData(){
-                var _this = this;
+                let _this = this;
                 _this.tableData = [];
                 _this.loading = true;
                 _this.totalPage = 1;
@@ -112,7 +112,7 @@
 
             //分页改变页码
             changePage(index){
-                var _this = this;
+                let _this = this;
                 _this.page = index;
                 if(_this.searchFlag){
                     _this.search();
@@ -122,7 +122,7 @@
 
             //搜索
             search(){
-                var _this = this;
+                let _this = this;
                 _this.loading = true;
                 _this.searchFlag = true;
                 _this.totalPage = 1;
@@ -155,10 +155,14 @@
             },
 
             reset(){
-                var _this = this;
+                let _this = this;
+                _this.$refs.resetTypeSelect.clearSingleSelect();
+                _this.$refs.resetTagSelect.clearSingleSelect();
                 _this.searchFlag = false;
                 _this.tableData = [];
                 _this.page  = 1;
+                _this.select_tag_list = [];
+                _this.select_type_list = [];
                 _this.getTableData();
             },
 
@@ -173,11 +177,13 @@
             },
             //根据标签id获取当前用户的文章
             getArticleByUserAndTagId(value){
-                if (value.length === 0){
-                    this.getTableData();
-                }else
+                let _this = this;
+                _this.$refs.resetTypeSelect.clearSingleSelect();
+                if (value.length === 0)
+                    _this.getTableData();
+                else
                     getArticleByUserAndTagId(value).then(res=>{
-                        this.tableData = res.data.data;
+                        _this.tableData = res.data.data;
                     })
 
             },
@@ -194,20 +200,23 @@
 
             //根据分类id获取当前用户的文章
             getArticleByUserAndTypeId(value){
+                let _this = this;
+                _this.$refs.resetTagSelect.clearSingleSelect();
                 if (value === undefined)
-                    this.getTableData();
+                    _this.getTableData();
                 else
                     getArticleByUserAndTypeId(value).then(res=>{
-                        this.tableData = res.data.data;
+                        _this.tableData = res.data.data;
                     })
             }
 
 
         },
         mounted() {
-            this.getTableData();
-            this.getTagList();
-            this.getTypeList();
+            let _this = this;
+            _this.getTableData();
+            _this.getTagList();
+            _this.getTypeList();
         },
         beforeRouteLeave(to, from, next) {
             from.meta.keepAlive = false;

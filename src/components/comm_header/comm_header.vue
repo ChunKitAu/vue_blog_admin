@@ -49,7 +49,7 @@
             <Menu
                     style="border:none"
                     mode="horizontal"
-                    :active-name="activeNname"
+                    :active-name="activeName"
                     @on-select="toPage"
             >
                 <MenuItem style="border:none" name="仪表盘">
@@ -95,7 +95,7 @@
             }
         },
         props:{
-            activeNname:'',
+            activeName:'',
         },
         methods:{
             // 点击导航
@@ -104,7 +104,7 @@
                     if (confirm("确认退出登录吗")) {
                         let _this = this;
                         _this.$store.commit(types.CLEARTOKEN);
-                        localStorage.removeItem("LoginForm");
+                        localStorage.removeItem("Authorization");
                         _this.$router.push({ name: "login" }).catch(()=>{});
                     }
                 }

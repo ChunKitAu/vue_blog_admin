@@ -4,7 +4,7 @@ const state ={
     token :localStorage.getItem('Authorization') ? localStorage.getItem('Authorization') : '',
 }
 
-var getters = {
+const getters = {
     token:(state) => state.token,
 }
 
@@ -15,12 +15,13 @@ const mutations = {
     },
     [types.CLEARTOKEN](state){
         state.token = '';
-        localStorage.removeItem('');
+        localStorage.removeItem('Authorization');
     }
 }
 
 const actions = {
     setToken:({commit},v) => {
+        localStorage.setItem('Authorization',v);
         commit(types.TOKEN,v);
     }
 }
