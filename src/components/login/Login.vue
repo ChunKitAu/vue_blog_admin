@@ -65,7 +65,7 @@ export default {
 
   mounted() {
     if (this.remeberme){
-      this.login(this.LoginForm);
+      // this.login(this.LoginForm);
     }
   },
 

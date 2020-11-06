@@ -1,6 +1,6 @@
 <template>
     <div class="login" >
-      <vueCanvasNest :config="{color:'0,0,0', count: 200}" ></vueCanvasNest>
+      <vueCanvasNest :config="{color:'0,0,0', count: 100}" ></vueCanvasNest>
         <div id="card" class="login-con">
             <div class="login-card">
                 <router-view></router-view>
