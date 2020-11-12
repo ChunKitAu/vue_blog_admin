@@ -29,11 +29,11 @@ export const delBlog = (id) => {
 export const getArticlesByUser = (data) => {
     return http.get(urls.getArticlesByUser, data);
 }
-export const getArticleByUserAndTagId = (id) => {
-    return http.get(urls.getArticlesByUserAndTagId + id);
+export const getArticleByUserAndTagId = (data) => {
+    return http.get(urls.getArticlesByUserAndTagId + data.tagId,data);
 }
-export const getArticleByUserAndTypeId = (id) => {
-    return http.get(urls.getArticlesByUserAndTypeId + id);
+export const getArticleByUserAndTypeId = (data) => {
+    return http.get(urls.getArticlesByUserAndTypeId + data.typeId,data);
 }
 
 //标签

@@ -52,6 +52,7 @@
 </template>
 <script>
     import {getArticlesByUser,delBlog,getSearchList,getTags,getTypes,getArticleByUserAndTagId,getArticleByUserAndTypeId} from "@/api/apis"
+    import article_status from '@/store/articles_status'
     export default {
         data () {
             return {
@@ -80,8 +81,11 @@
                 size:10,
                 totalPage:0,
                 searchValue:"",
-                searchFlag:false,
                 loading:true,
+
+                //用于分页记录获取记录途径
+                status:article_status.DEFAULT,
+                type_or_tage_id : 0,
             }
         },
         methods: {
@@ -114,9 +118,17 @@
             changePage(index){
                 let _this = this;
                 _this.page = index;
-                if(_this.searchFlag){
-                    _this.search();
-                }else _this.getTableData();
+
+                switch (_this.status) {
+                    case article_status.DEFAULT:
+                        _this.getTableData(); break;
+                    case article_status.GET_TYPE:
+                        _this.getArticleByUserAndTypeId(_this.type_or_tage_id);break;
+                    case article_status.GET_TAG:
+                        _this.getArticleByUserAndTagId(_this.type_or_tage_id);break;
+                    case article_status.SEARCH:
+                        _this.search();break;
+                }
 
             },
 
@@ -124,7 +136,7 @@
             search(){
                 let _this = this;
                 _this.loading = true;
-                _this.searchFlag = true;
+                _this.status = article_status.SEARCH;
                 _this.totalPage = 1;
                 _this.tableData = [];
                 getSearchList({
@@ -136,8 +148,8 @@
                         _this.tableData = res.data.data.content;
                     if(res.data.data.totalElements)
                         _this.totalPage = res.data.data.totalElements;
-                        _this.loading = false;
                 });
+                _this.loading = false;
             },
             //删除
             deleteArticle(index,article_id){
@@ -158,7 +170,7 @@
                 let _this = this;
                 _this.$refs.resetTypeSelect.clearSingleSelect();
                 _this.$refs.resetTagSelect.clearSingleSelect();
-                _this.searchFlag = false;
+                _this.status = article_status.DEFAULT;
                 _this.tableData = [];
                 _this.page  = 1;
                 _this.select_tag_list = [];
@@ -178,13 +190,21 @@
             //根据标签id获取当前用户的文章
             getArticleByUserAndTagId(value){
                 let _this = this;
+                _this.status = article_status.GET_TAG;
                 _this.$refs.resetTypeSelect.clearSingleSelect();
                 if (value.length === 0)
                     _this.getTableData();
-                else
-                    getArticleByUserAndTagId(value).then(res=>{
+                else{
+                    _this.type_or_tage_id = value;
+                    getArticleByUserAndTagId({
+                        "page": _this.page,
+                        "size":_this.size,
+                        "tagId":_this.type_or_tage_id,
+                    }).then(res=>{
+                        _this.totalPage = res.data.data[0].totalPage * 10;
                         _this.tableData = res.data.data;
                     })
+                }
 
             },
 
@@ -201,13 +221,22 @@
             //根据分类id获取当前用户的文章
             getArticleByUserAndTypeId(value){
                 let _this = this;
+                _this.status = article_status.GET_TYPE;
                 _this.$refs.resetTagSelect.clearSingleSelect();
                 if (value === undefined)
                     _this.getTableData();
-                else
-                    getArticleByUserAndTypeId(value).then(res=>{
+                else{
+                    _this.type_or_tage_id = value;
+                    getArticleByUserAndTypeId({
+                        "page": _this.page,
+                        "size":_this.size,
+                        "typeId":_this.type_or_tage_id,
+                    }).then(res=>{
+                        _this.totalPage = res.data.data[0].totalPage * 10;
                         _this.tableData = res.data.data;
                     })
+                }
+
             }
 
 
