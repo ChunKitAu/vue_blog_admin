@@ -1,6 +1,8 @@
 export const urls = {
     // 登录
     login: "/user/login",
+    loginByToken:"/user/login/token",
+
     // 注册
     register: "/user/save",
 

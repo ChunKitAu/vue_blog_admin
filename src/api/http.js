@@ -35,7 +35,6 @@ class HttpRequest {
 
             if (config.url !== HttpRequest.LOGIN && config.url !== HttpRequest.REGISTER) {
                 let token = Vue.$store.getters.token;
-                // let token = localStorage.getItem('Authorization');
                 if (token != null || token !== undefined) {
                     config.headers['Authorization'] = token;
                 } else {

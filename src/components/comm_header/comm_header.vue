@@ -100,16 +100,17 @@
         methods:{
             // 点击导航
             toPage(name) {
+                let _this = this;
                 if (name === "退出登录") {
                     if (confirm("确认退出登录吗")) {
-                        let _this = this;
                         _this.$store.commit(types.CLEARTOKEN);
+                        localStorage.removeItem('remember_me');
                         localStorage.removeItem("Authorization");
                         _this.$router.push({ name: "login" }).catch(()=>{});
                     }
                 }
-                this.$router.push({
-                    name: this.list[name]
+                _this.$router.push({
+                    name: _this.list[name]
                 }).catch(()=>{});
             }
         },

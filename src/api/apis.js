@@ -5,6 +5,10 @@ const http = HttpRequest.getInstance();
 export const login = (data) => {
     return http.post(urls.login, data);
 }
+export const loginByToken = (data) => {
+    return http.get(urls.loginByToken, data);
+}
+
 
 export const register = (data) => {
     return http.post(urls.register, data);

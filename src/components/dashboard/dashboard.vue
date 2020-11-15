@@ -59,7 +59,7 @@
                 _this.date = name;
                 _this.tagName = name;
                 _this.totalPage = 0;
-                _this.tableData = 0;
+                _this.tableData = [];
                 _this.getEchartsData();
                 _this.getTableData();
             },

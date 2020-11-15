@@ -17,7 +17,7 @@
         </div>
         <input v-model="LoginForm['password']" type="password" class="input" />
       </FormItem>
-      <Checkbox v-model="remeberme">
+      <Checkbox v-model="remember_me">
         <span class="rememberKey">记住密码</span>
       </Checkbox>
       <br />
@@ -40,15 +40,15 @@
 </template>
 
 <script>
-import { login } from "../../api/apis";
+import { login ,loginByToken} from "../../api/apis";
 import types from "@/store/types";
 
 export default {
 
   created() {
-    let LoginForm = localStorage.getItem('Authorization');
-    if (LoginForm!=null || LoginForm != undefined) {
-      this.remeberme = true;
+    let re = localStorage.getItem('remember_me');
+    if (re != null || re != undefined) {
+      this.remember_me = true;
     }
   },
 
@@ -59,13 +59,13 @@ export default {
         "password": ""
       },
       loginLoading: false,
-      remeberme: false
+      remember_me: false
     };
   },
 
   mounted() {
-    if (this.remeberme){
-      // this.login(this.LoginForm);
+    if (this.remember_me){
+      this.loginByToken();
     }
   },
 
@@ -84,18 +84,28 @@ export default {
           _this.loginLoading = false;
           return;
         }
-        //todo remember me
-        // _this.remeberme && localStorage.setItem("LoginForm", JSON.stringify(_this.LoginForm));
 
-        _this.loginLoading = false;
-
-        // token和id存起来
+        if (_this.remember_me)
+          localStorage.setItem('remember_me',1);
+        else localStorage.removeItem('remember_me');
+        
         _this.$store.dispatch('setToken',res.data.data.token);
-        // _this.$store.commit(types.TOKEN, res.data.data.token);
+        _this.loginLoading = false;
 
         //重定向
         _this.$router.push({ name: "Home" }).catch(()=>{});
       });
+    },
+
+    loginByToken(){
+      let _this = this;
+      loginByToken().then(res =>{
+        if (res.data.code !== 200){
+          _this.$Message.error("请重新登陆!");
+        }
+        //重定向
+        _this.$router.push({ name: "Home" }).catch(()=>{});
+      })
     },
 
     toRegister: function() {
