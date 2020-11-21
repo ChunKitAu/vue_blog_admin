@@ -1,6 +1,7 @@
 import axios from 'axios';
 import QS from 'qs';
 import Vue from "../main";
+import types from "@/store/types";
 
 
 //认证失败
@@ -39,9 +40,7 @@ class HttpRequest {
                     config.headers['Authorization'] = token;
                 } else {
                     alert("请先进行登录");
-                    Vue.$router.push({
-                        name: "login"
-                    }).catch(()=>{})
+                    Vue.$router.push({name: "login"}).catch(()=>{})
                 }
             }
             return config;
@@ -55,6 +54,8 @@ class HttpRequest {
 
             if(response.data.code === token_confrim_fail){
                 alert("请登录");
+                Vue.$store.commit(types.CLEARTOKEN);
+                localStorage.removeItem('remember_me');
                 Vue.$router.push({name: "login"}).catch(()=>{});
             }
             return response;

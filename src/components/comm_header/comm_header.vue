@@ -105,7 +105,6 @@
                     if (confirm("确认退出登录吗")) {
                         _this.$store.commit(types.CLEARTOKEN);
                         localStorage.removeItem('remember_me');
-                        localStorage.removeItem("Authorization");
                         _this.$router.push({ name: "login" }).catch(()=>{});
                     }
                 }
